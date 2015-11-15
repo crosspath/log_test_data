@@ -6,8 +6,8 @@ require 'csv'
 puts 'Import data...'
 
 CSV.open('db/seed.csv', 'r', col_sep: ';', headers: true, quote_char: '`').each do |csv|
-    user = User.find_or_create_by!(name: csv['user_id'])
-    log = Log.create!(csv.to_h.merge('user_id' => user.id))
+    user = csv['user_id'].present? && User.find_or_create_by!(id: csv['user_id']).id
+    log = Log.create!(csv.to_h.merge('user_id' => user))
 end
 
 puts 'Set session identifier'
